@@ -71,7 +71,11 @@ class dps_GUI(QMainWindow):
 		self.setWindowTitle('DPS5005_pyGUI')
 		
 		self.mutex = QMutex()
-		
+		self.CSVexportfile = "./export/" + datetime.datetime.now().strftime("%Y%m%d-%H%M.csv")
+		self.fileW = open(self.CSVexportfile, "w",buffering=1)
+		self.startTime = time.time()
+		self.fileW.write("time\tV\tI\n")
+
 	#--- fix font style & size, mainly for HighDpiScaling
 		f = QFont("Liberation Sans", 10)
 		self.setFont(f)
@@ -542,6 +546,7 @@ class dps_GUI(QMainWindow):
 		if data != False:       
 			self.vout = ("%5.2f" % data[2]) # vout
 			self.iout = ("%5.3f" % data[3]) # iout
+			self.fileW.write(f"{time.time()- self.startTime}\t{self.vout}\t{self.iout}\n")
 			
 			self.accrued_capacity(self.iout)
 			
